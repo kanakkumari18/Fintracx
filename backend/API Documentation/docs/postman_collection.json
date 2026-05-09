@@ -1,0 +1,192 @@
+{
+  "info": {
+    "name": "Finance Dashboard API",
+    "description": "Finance RBAC API (Auth, Users, Records, Summary)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000/api" },
+    { "key": "token", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "recordId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login (Viewer)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@finsyra.com\",\n  \"password\": \"123456\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@finsyra.com\",\n  \"password\": \"123456\"\n}"
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Summary",
+      "item": [
+        {
+          "name": "Get Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/summary"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Records",
+      "item": [
+        {
+          "name": "Get Records (Pagination)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/records?page=1&limit=10"
+          }
+        },
+        {
+          "name": "Search Records",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/records?search=food"
+          }
+        },
+        {
+          "name": "Filter by Type",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/records?type=expense"
+          }
+        },
+        {
+          "name": "Create Record (Analyst/Admin only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/records",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 4500,\n  \"type\": \"income\",\n  \"category\": \"Salary\",\n  \"date\": \"2026-04-05\",\n  \"notes\": \"Salary\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Record",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/records/{{recordId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 5000,\n  \"category\": \"Updated\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Record",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/records/{{recordId}}"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Users (Admin only)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/users"
+          }
+        },
+        {
+          "name": "Update Role",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/users/{{userId}}/role",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"ANALYST\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/users/{{userId}}/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/users/me"
+          }
+        }
+      ]
+    }
+  ]
+}
